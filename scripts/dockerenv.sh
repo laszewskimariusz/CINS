@@ -15,6 +15,6 @@ echo "DONE"
 
 echo -n "Installing Docker CE packages: "
 apt-get update 2>&1 >/dev/null
-apt-get -y install docker-ce
+apt-get -y install docker-ce 2>&1 >/dev/null
 systemctl enable docker 2>&1 >/dev/null
 echo "DONE"
