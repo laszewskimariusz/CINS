@@ -1,10 +1,32 @@
-<html>
-    <head>
-      <body>
-            <div class="container">
-                   <h1>  YOOYOYO </h1> 
-                    Jakiś tam tekst o niczym 
-            </div>           
-         </body>
-    </head>
-</html>
+{% extends "base.html" %}
+
+
+{% block body %}
+
+<div class="container">
+        <div class="header clearfix">
+          <h3 class="text-muted">CINS - tu może damy logo :) </h3>
+        </div>  
+        <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                <h1 class="display-3">Login</h1>
+
+        <p>Zaloguj się</p>
+
+        <h2>Logowanie</h2>
+
+        <from method="post"></from>
+            
+
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">Zaloguj</button>
+
+        </from>
+
+    </div>
+
+{% endblock %}
