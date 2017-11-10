@@ -10,14 +10,9 @@
                 <div class="jumbotron jumbotron-fluid">
                     <div class="container">
                         <h1 class="display-3">Login</h1>
-
-
-                            <form method="post">
-                
+                            <form method="post">              
                                 {% csrf_token %}
-
                                 {{ form.as_p }}
-
                             <button type="submit">Zaloguj</button>
                             </form>
                     </div>
