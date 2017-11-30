@@ -6,7 +6,7 @@ class Pid
 {
 private:
     int pid;
-    char * path;
+    std::string path;
 public:
     Pid();
     void write_file();

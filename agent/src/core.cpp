@@ -13,11 +13,11 @@ void Pid::write_file()
 {
     std::ofstream pidfile;
 
-    pidfile.open(path);
+    pidfile.open(path.c_str());
     pidfile << pid;
     pidfile.close();
 }
 void Pid::remove_file()
 {
-    remove(path);
+    remove(path.c_str());
 }
