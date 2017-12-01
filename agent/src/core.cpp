@@ -9,7 +9,7 @@ Pid::Pid()
     pid = getpid();
     path = "/var/run/agent.pid";
 }
-void Pid::write_file()
+void Pid::write()
 {
     std::ofstream pidfile;
 
@@ -17,7 +17,7 @@ void Pid::write_file()
     pidfile << pid;
     pidfile.close();
 }
-void Pid::remove_file()
+void Pid::rm()
 {
     remove(path.c_str());
 }

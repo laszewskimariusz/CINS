@@ -8,7 +8,7 @@ Pid pid;
 
 void sig_handler(int signum)
 {
-    pid.remove_file();
+    pid.rm();
     exit(0);
 }
 
@@ -18,7 +18,7 @@ int main()
     using std::endl;
 
     int n = 0;
-    pid.write_file();
+    pid.write();
 
     signal(SIGTERM, sig_handler);
 
@@ -27,7 +27,7 @@ int main()
         cout << "Loop #" << n++ << endl;
         sleep(1);
     }
-    pid.remove_file();
+    pid.rm();
 
     return 0; 
 }

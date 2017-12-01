@@ -9,8 +9,8 @@ private:
     std::string path;
 public:
     Pid();
-    void write_file();
-    void remove_file();
+    void write();
+    void rm();
 };
 
 #endif
