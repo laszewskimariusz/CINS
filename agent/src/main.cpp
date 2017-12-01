@@ -20,7 +20,7 @@ int main()
     int n = 0;
     pid.write_file();
 
-    signal(SIGINT, sig_handler);
+    signal(SIGTERM, sig_handler);
 
     while (1)
     {
