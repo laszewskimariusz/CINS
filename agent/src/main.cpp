@@ -8,7 +8,6 @@ Pid pid;
 
 void sig_handler(int signum)
 {
-    pid.rm();
     exit(0);
 }
 
@@ -27,7 +26,6 @@ int main()
         cout << "Loop #" << n++ << endl;
         sleep(1);
     }
-    pid.rm();
 
     return 0; 
 }
