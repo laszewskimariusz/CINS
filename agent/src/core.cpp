@@ -17,7 +17,7 @@ void Pid::write()
     pidfile << pid;
     pidfile.close();
 }
-void Pid::rm()
+Pid::~Pid()
 {
     remove(path.c_str());
 }

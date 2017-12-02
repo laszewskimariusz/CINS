@@ -9,8 +9,8 @@ private:
     std::string path;
 public:
     Pid();
+    ~Pid();
     void write();
-    void rm();
 };
 
 #endif
