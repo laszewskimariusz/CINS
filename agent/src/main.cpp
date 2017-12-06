@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <unistd.h>
 #include "core.h"
+#include "network.h"
 
 Pid pid;
 
@@ -18,11 +19,16 @@ int main()
 
     int n = 0;
     pid.write();
+    
+    TCPsock sock;
+    TCPserver srv(1024);
+    
+    srv.start(sock);
 
     signal(SIGTERM, sig_handler);
-
     while (1)
     {
+        srv.conn(sock);
         cout << "Loop #" << n++ << endl;
         sleep(1);
     }

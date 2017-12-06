@@ -8,6 +8,8 @@
 
 TCPsock::TCPsock()
 {
+    m_opt = 1;
+
     if ((m_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
         std::cout << "Error: Failed to create socket\n";
@@ -24,28 +26,39 @@ TCPsock::~TCPsock()
     close(m_fd);
 }
 
-TCPlisten::TCPlisten(int port, const char * ip)
+TCPserver::TCPserver(int port, const char * ip)
 {
-    struct sockaddr_in address;
-    int addrlen = sizeof(address);
-    TCPsock sock;
-
     m_port = port;
-    address.sin_family = AF_INET;
-    address.sin_port = htons(m_port);
-    if (ip == NULL)
-        address.sin_addr.s_addr = INADDR_ANY;
-    else
-        address.sin_addr.s_addr = inet_addr(ip);
+    m_addr.sin_family = AF_INET;
+    m_addr.sin_port = htons(m_port);
     
-    if (bind(sock.m_fd, (struct sockaddr *) &address, sizeof(address)) < 0)
+    if (ip == NULL)
+        m_addr.sin_addr.s_addr = INADDR_ANY;
+    else
+        m_addr.sin_addr.s_addr = inet_addr(ip);
+    
+    m_addrlen = sizeof(m_addr);
+}
+void TCPserver::start(TCPsock & sock)
+{
+
+    if (bind(sock.getSockfd(), (struct sockaddr *) &m_addr, sizeof(m_addr)) < 0)
     {
         std::cout << "Error: Failed to bind to interface.\n";
         exit(EXIT_FAILURE);
     }
-    if (listen(sock.m_fd, 5) < 0)
+    if (listen(sock.getSockfd(), 5) < 0)
     {
         std::cout << "Error: Failed to listen on " << m_port << " port.\n";
         exit(EXIT_FAILURE);
     }
+}
+int TCPserver::conn(TCPsock & sock)
+{
+    if ((m_connfd = accept(sock.getSockfd(), (struct sockaddr *) &m_addr, (socklen_t *) &m_addrlen)) < 0)
+    {
+        std::cout << "Error: Accepting connection failed, connfd: " << m_connfd << "\n";
+        exit(EXIT_FAILURE);
+    }
+    return m_connfd;
 }

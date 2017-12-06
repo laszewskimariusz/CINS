@@ -12,16 +12,21 @@ private:
 public:
     TCPsock();
     ~TCPsock();
-    friend class TCPlisten;
+    int getSockfd() { return m_fd; }
 };
 
-class TCPlisten
+class TCPserver
 {
 private:
     char m_ip[19];
     int m_port;
+    int m_connfd;
+    int m_addrlen;
+    struct sockaddr_in m_addr;
 public:
-    TCPlisten(int port, const char * ip = NULL);
+    TCPserver(int port, const char * ip = NULL);
+    void start(TCPsock & sock);
+    int conn(TCPsock & sock);
 };
 
 #endif
