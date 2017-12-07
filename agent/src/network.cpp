@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <cstring>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -61,4 +62,19 @@ int TCPserver::conn(TCPsock & sock)
         exit(EXIT_FAILURE);
     }
     return m_connfd;
+}
+
+int Message::msend(int sockfd, const char * msg)
+{
+    int Size = strlen(msg) + 3;
+    char buff[Size];
+    int i = 0;
+    for (i = 0; i < Size && msg[i]; i++)
+        buff[i] = msg[i];
+    buff[i++] = '\r';
+    buff[i++] = '\n';
+    while (i < Size)
+        buff[i++] = '\0';
+    
+    return send(sockfd, buff, sizeof(buff), 0);
 }

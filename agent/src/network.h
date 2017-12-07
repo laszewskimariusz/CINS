@@ -29,4 +29,11 @@ public:
     int conn(TCPsock & sock);
 };
 
+class Message
+{
+public:
+    int msend(int sockfd, const char * msg);
+    int mread(int sockfd, const char * msg);
+};
+
 #endif

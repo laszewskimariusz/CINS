@@ -2,6 +2,7 @@
 #include <csignal>
 #include <cstdlib>
 #include <unistd.h>
+#include <cstring>
 #include "core.h"
 #include "network.h"
 
@@ -26,9 +27,12 @@ int main()
     srv.start(sock);
 
     signal(SIGTERM, sig_handler);
+    char * message = "CINS agent ready";
     while (1)
     {
-        srv.conn(sock);
+        int connfd = srv.conn(sock);
+        Message outmsg;
+        outmsg.msend(connfd, message);
         cout << "Loop #" << n++ << endl;
         sleep(1);
     }
