@@ -45,7 +45,10 @@ int main()
             cout << "Error reciving message\n";
             exit(EXIT_FAILURE);
         }
-        recbuff = recbuff.setBufferSize(connfd);
+        if (! recbuff.setBufferSize(connfd))
+        {
+            cout << "Warning: Buffer not set, using default size\n";
+        }
         cout << "Buffer size: " << recbuff.getBufferSize() << endl;
     }
 

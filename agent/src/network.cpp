@@ -92,14 +92,14 @@ MSGBuffer::~MSGBuffer()
     std::cout << "Cleaning message buffer\n";
     delete[] m_buff;
 }
-MSGBuffer & MSGBuffer::setBufferSize(int sockfd)
+int MSGBuffer::setBufferSize(int sockfd)
 {
     std::string message(m_buff);
 
     std::size_t pos;    
     if ((pos = message.find("BUFF")) == std::string::npos)
     {
-        std::cout << "Error: Issue buffer size first\n";
+        return 0;
     }
     else
     {
@@ -108,5 +108,5 @@ MSGBuffer & MSGBuffer::setBufferSize(int sockfd)
         std::string::size_type sz = 0;
         m_size = std::atoi(s_size.c_str());
     }
-    return *this;
+    return 1;
 }

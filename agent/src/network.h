@@ -37,7 +37,7 @@ public:
     MSGBuffer(size_t size = 1024);
     MSGBuffer(const char * str);
     ~MSGBuffer();
-    MSGBuffer & setBufferSize(int sockfd);
+    int setBufferSize(int sockfd);
     size_t getBufferSize() { return m_size; } 
     friend class Message;
 };
