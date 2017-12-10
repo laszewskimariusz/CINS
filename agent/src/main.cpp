@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <csignal>
 #include <cstdlib>
 #include <unistd.h>
@@ -17,24 +18,35 @@ int main()
 {
     using std::cout;
     using std::endl;
+    using std::string;
 
     int n = 0;
     pid.write();
-    
-    TCPsock sock;
-    TCPserver srv(1024);
-    
-    srv.start(sock);
-
     signal(SIGTERM, sig_handler);
-    char * message = "CINS agent ready";
+
+    TCPsock sock;
+    TCPserver listener(1024);  
+    listener.start(sock);
+    
     while (1)
     {
-        int connfd = srv.conn(sock);
-        Message outmsg;
-        outmsg.msend(connfd, message);
-        cout << "Loop #" << n++ << endl;
-        sleep(1);
+        int connfd = listener.accept_conn(sock);
+        MSGBuffer recbuff;
+        MSGBuffer sendbuff("CINS agent ready\r\nGo Ahead\r\n");
+        Message out;
+        Message in;
+        if (! out.msend(connfd, sendbuff))
+        {
+            cout << "Error sending message\n";
+            exit(EXIT_FAILURE);
+        }
+        if (!in.mread(connfd, recbuff))
+        {
+            cout << "Error reciving message\n";
+            exit(EXIT_FAILURE);
+        }
+        recbuff = recbuff.setBufferSize(connfd);
+        cout << "Buffer size: " << recbuff.getBufferSize() << endl;
     }
 
     return 0; 

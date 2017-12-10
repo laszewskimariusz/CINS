@@ -26,14 +26,27 @@ private:
 public:
     TCPserver(int port, const char * ip = NULL);
     void start(TCPsock & sock);
-    int conn(TCPsock & sock);
+    int accept_conn(TCPsock & sock);
 };
-
+class MSGBuffer
+{
+private:
+    size_t m_size;
+    char * m_buff;
+public:
+    MSGBuffer(size_t size = 1024);
+    MSGBuffer(const char * str);
+    ~MSGBuffer();
+    MSGBuffer & setBufferSize(int sockfd);
+    size_t getBufferSize() { return m_size; } 
+    friend class Message;
+};
 class Message
 {
 public:
-    int msend(int sockfd, const char * msg);
-    int mread(int sockfd, const char * msg);
+    int msend(int sockfd, MSGBuffer & buff);
+    int mread(int sockfd, MSGBuffer & buff);
 };
 
+int greetClient(Message & msg, int sockfd);
 #endif

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <string>
 #include <cstring>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -54,7 +55,7 @@ void TCPserver::start(TCPsock & sock)
         exit(EXIT_FAILURE);
     }
 }
-int TCPserver::conn(TCPsock & sock)
+int TCPserver::accept_conn(TCPsock & sock)
 {
     if ((m_connfd = accept(sock.getSockfd(), (struct sockaddr *) &m_addr, (socklen_t *) &m_addrlen)) < 0)
     {
@@ -64,17 +65,48 @@ int TCPserver::conn(TCPsock & sock)
     return m_connfd;
 }
 
-int Message::msend(int sockfd, const char * msg)
+int Message::msend(int sockfd, MSGBuffer & buff)
+{   
+    return send(sockfd, buff.m_buff, buff.m_size, 0);
+}
+int Message::mread(int sockfd, MSGBuffer & buff)
 {
-    int Size = strlen(msg) + 3;
-    char buff[Size];
-    int i = 0;
-    for (i = 0; i < Size && msg[i]; i++)
-        buff[i] = msg[i];
-    buff[i++] = '\r';
-    buff[i++] = '\n';
-    while (i < Size)
-        buff[i++] = '\0';
-    
-    return send(sockfd, buff, sizeof(buff), 0);
+    return read(sockfd, buff.m_buff, buff.m_size);
+}
+
+MSGBuffer::MSGBuffer(size_t size)
+{
+    m_size = size;
+    m_buff = new char[size];
+    std::memset(m_buff, '\0', size);
+}
+MSGBuffer::MSGBuffer(const char * str)
+{
+    m_size = strlen(str)+1;
+    m_buff = new char[m_size];
+    std::memset(m_buff, '\0', m_size);
+    strncpy(m_buff, str, m_size);
+}
+MSGBuffer::~MSGBuffer()
+{
+    std::cout << "Cleaning message buffer\n";
+    delete[] m_buff;
+}
+MSGBuffer & MSGBuffer::setBufferSize(int sockfd)
+{
+    std::string message(m_buff);
+
+    std::size_t pos;    
+    if ((pos = message.find("BUFF")) == std::string::npos)
+    {
+        std::cout << "Error: Issue buffer size first\n";
+    }
+    else
+    {
+        pos += strlen("BUFF") + 1;
+        std::string s_size = message.substr(pos);
+        std::string::size_type sz = 0;
+        m_size = std::atoi(s_size.c_str());
+    }
+    return *this;
 }
