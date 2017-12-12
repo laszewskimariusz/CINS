@@ -28,25 +28,25 @@ public:
     void start(TCPsock & sock);
     int accept_conn(TCPsock & sock);
 };
-class MSGBuffer
+class Message
 {
 private:
     size_t m_size;
     char * m_buff;
 public:
-    MSGBuffer(size_t size = 1024);
-    MSGBuffer(const char * str);
-    ~MSGBuffer();
-    MSGBuffer & setBufferSize(int sockfd);
+    Message(size_t size = 1024);
+    Message(const char * str);
+    ~Message();
+    int setBufferSize(int sockfd);
     size_t getBufferSize() { return m_size; } 
-    friend class Message;
+    friend class Stream;
 };
-class Message
+class Stream
 {
 public:
-    int msend(int sockfd, MSGBuffer & buff);
-    int mread(int sockfd, MSGBuffer & buff);
+    int msend(int sockfd, Message & buff);
+    int mread(int sockfd, Message & buff);
 };
 
-int greetClient(Message & msg, int sockfd);
+int greetClient(Stream & msg, int sockfd);
 #endif
