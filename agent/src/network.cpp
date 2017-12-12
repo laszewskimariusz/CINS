@@ -65,34 +65,34 @@ int TCPserver::accept_conn(TCPsock & sock)
     return m_connfd;
 }
 
-int Message::msend(int sockfd, MSGBuffer & buff)
+int Stream::msend(int sockfd, Message & buff)
 {   
     return send(sockfd, buff.m_buff, buff.m_size, 0);
 }
-int Message::mread(int sockfd, MSGBuffer & buff)
+int Stream::mread(int sockfd, Message & buff)
 {
     return read(sockfd, buff.m_buff, buff.m_size);
 }
 
-MSGBuffer::MSGBuffer(size_t size)
+Message::Message(size_t size)
 {
     m_size = size;
     m_buff = new char[size];
     std::memset(m_buff, '\0', size);
 }
-MSGBuffer::MSGBuffer(const char * str)
+Message::Message(const char * str)
 {
     m_size = strlen(str)+1;
     m_buff = new char[m_size];
     std::memset(m_buff, '\0', m_size);
     strncpy(m_buff, str, m_size);
 }
-MSGBuffer::~MSGBuffer()
+Message::~Message()
 {
     std::cout << "Cleaning message buffer\n";
     delete[] m_buff;
 }
-int MSGBuffer::setBufferSize(int sockfd)
+int Message::setBufferSize(int sockfd)
 {
     std::string message(m_buff);
 

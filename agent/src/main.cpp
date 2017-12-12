@@ -31,11 +31,11 @@ int main()
     while (1)
     {
         int connfd = listener.accept_conn(sock);
-        MSGBuffer recbuff;
-        MSGBuffer sendbuff("CINS agent ready\r\nGo Ahead\r\n");
-        Message out;
-        Message in;
-        if (! out.msend(connfd, sendbuff))
+        Message recbuff;
+        Message greet("CINS agent ready\r\nGo Ahead\r\n");
+        Stream out;
+        Stream in;
+        if (! out.msend(connfd, greet))
         {
             cout << "Error sending message\n";
             exit(EXIT_FAILURE);
@@ -50,6 +50,8 @@ int main()
             cout << "Warning: Buffer not set, using default size\n";
         }
         cout << "Buffer size: " << recbuff.getBufferSize() << endl;
+        Message ok("OK\r\n");
+        out.msend(connfd, ok);
     }
 
     return 0; 
